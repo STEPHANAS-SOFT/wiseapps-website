@@ -12,6 +12,7 @@ const footerLinks: Record<string, FooterLink[]> = {
   Company: [
     { href: '/', label: 'Home' },
     { href: '/apps', label: 'Our Apps' },
+    { href: '/about', label: 'About Us' },
     { href: '/support', label: 'Support' },
   ],
   Legal: [

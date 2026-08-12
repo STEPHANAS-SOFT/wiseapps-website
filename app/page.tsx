@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { apps } from '@/data/apps';
 import AppCard from '@/components/AppCard';
+import NewsletterForm from '@/components/NewsletterForm';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -25,6 +26,51 @@ const categories = [
   { icon: '💼', label: 'Business' },
   { icon: '🧠', label: 'Education' },
   { icon: '💳', label: 'Finance' },
+];
+
+const testimonials = [
+  {
+    name: 'Emeka O.',
+    app: 'All Nigeria Newspapers',
+    rating: 5,
+    text: 'Best Nigerian news app I have used. Covers everything from Punch to Vanguard in one place. Fast and clean.',
+    platform: 'Google Play',
+  },
+  {
+    name: 'Tunde A.',
+    app: 'SoundPad — Beat Maker',
+    rating: 5,
+    text: 'This app is a game changer. I use it with my MIDI keyboard every day to make beats. Highly recommended for producers.',
+    platform: 'Google Play',
+  },
+  {
+    name: 'Grace M.',
+    app: 'Invoice Manager',
+    rating: 5,
+    text: 'Super easy to use. I send professional invoices to my clients within seconds. Saves me so much time running my business.',
+    platform: 'App Store',
+  },
+  {
+    name: 'Pastor Daniel K.',
+    app: 'VerseFlow',
+    rating: 5,
+    text: 'VerseFlow has transformed our Sunday services. It picks up Bible verses automatically and displays them — our team loves it.',
+    platform: 'verseflow.app',
+  },
+  {
+    name: 'Chidi N.',
+    app: 'Nigeria Comedy Sounds',
+    rating: 5,
+    text: 'Absolutely hilarious. I send these clips to my friends every day. The sound quality is great and there are so many to choose from.',
+    platform: 'Google Play',
+  },
+  {
+    name: 'Amara S.',
+    app: 'PrepForge',
+    rating: 5,
+    text: 'I uploaded my lecture notes and it generated quiz questions immediately. My exam scores have improved a lot since I started using this.',
+    platform: 'App Store',
+  },
 ];
 
 export default function HomePage() {
@@ -242,6 +288,58 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ─────────────────────────────────────── */}
+      <section className={`section ${styles.testimonialsSection}`}>
+        <div className="container">
+          <div className="section-header">
+            <p className="eyebrow">What Users Say</p>
+            <h2 className="display-lg">
+              Loved by <span className="text-gradient">Hundreds of Thousands</span>
+            </h2>
+            <p>Real reviews from real users across Google Play and the App Store.</p>
+          </div>
+          <div className={styles.testimonialsGrid}>
+            {testimonials.map((t) => (
+              <div key={t.name + t.app} className={`card ${styles.testimonialCard}`}>
+                <div className={styles.testimonialStars}>
+                  {'★'.repeat(t.rating)}
+                </div>
+                <p className={styles.testimonialText}>&ldquo;{t.text}&rdquo;</p>
+                <div className={styles.testimonialAuthor}>
+                  <div className={styles.testimonialAvatar}>
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className={styles.testimonialName}>{t.name}</div>
+                    <div className={styles.testimonialMeta}>{t.app} · {t.platform}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Newsletter ───────────────────────────────────────── */}
+      <section className={styles.newsletterSection}>
+        <div className={styles.newsletterBg} aria-hidden="true">
+          <div className={styles.newsletterBlob1} />
+          <div className={styles.newsletterBlob2} />
+        </div>
+        <div className="container">
+          <div className={styles.newsletterContent}>
+            <div className={styles.newsletterIcon}>📬</div>
+            <h2 className={`display-lg ${styles.newsletterTitle}`}>
+              Stay Updated on <span className="text-gradient">New Apps</span>
+            </h2>
+            <p className={styles.newsletterSubtitle}>
+              Get notified when we launch new apps, release major updates, or have something exciting to share. No spam, ever.
+            </p>
+            <NewsletterForm />
           </div>
         </div>
       </section>
