@@ -157,6 +157,58 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Founder */}
+      <section className={`section ${styles.founderSection}`}>
+        <div className="container">
+          <div className="section-header">
+            <p className="eyebrow">The Person Behind It</p>
+            <h2 className="display-lg">
+              Meet the <span className="text-gradient">Founder</span>
+            </h2>
+          </div>
+          <div className={styles.founderCard}>
+            <div className={styles.founderImageWrap}>
+              <Image
+                src="/founder.jpg"
+                alt="Stephen Adeniran — Founder & Developer, WiseApps Dev"
+                width={180}
+                height={180}
+                className={styles.founderImage}
+                unoptimized
+              />
+              <div className={styles.founderGlow} />
+            </div>
+            <div className={styles.founderInfo}>
+              <h3 className={styles.founderName}>Stephen Adeniran</h3>
+              <p className={styles.founderTitle}>Founder &amp; Developer</p>
+              <p className={styles.founderBio}>
+                I&apos;m the developer behind every app at WiseApps Dev. Since 2019, I&apos;ve been
+                building mobile and desktop software from Minna, Nigeria — solving everyday problems
+                for people across Africa and beyond. From beat-making tools to church media software,
+                every product I ship is something I&apos;d use myself.
+              </p>
+              <div className={styles.founderStats}>
+                <div className={styles.founderStat}>
+                  <span className={styles.founderStatValue}>11+</span>
+                  <span className={styles.founderStatLabel}>Apps Shipped</span>
+                </div>
+                <div className={styles.founderStat}>
+                  <span className={styles.founderStatValue}>500K+</span>
+                  <span className={styles.founderStatLabel}>Total Downloads</span>
+                </div>
+                <div className={styles.founderStat}>
+                  <span className={styles.founderStatValue}>6+</span>
+                  <span className={styles.founderStatLabel}>Years Building</span>
+                </div>
+              </div>
+              <a href="mailto:wiseappsdev@gmail.com" className={`btn btn-primary ${styles.founderCta}`}>
+                Get in Touch
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Values */}
       <section className={`section ${styles.valuesSection}`}>
         <div className="container">
