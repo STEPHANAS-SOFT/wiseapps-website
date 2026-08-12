@@ -1,0 +1,72 @@
+.page {
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.card {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.contactLink {
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+.contactLink:hover {
+  text-decoration: underline;
+}
+
+.formCard {
+  padding: var(--space-2xl);
+}
+
+.formTitle {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
