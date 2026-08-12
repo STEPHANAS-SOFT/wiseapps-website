@@ -9,25 +9,43 @@ export default function DataDeletionPage() {
   const [selectedApp, setSelectedApp] = useState('');
   const [email, setEmail] = useState('');
   const [deletionType, setDeletionType] = useState('full');
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [reqId, setReqId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !selectedApp) return;
 
-    const generatedId = 'WAD-DEL-' + Math.floor(100000 + Math.random() * 900000);
-    setReqId(generatedId);
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMessage('');
 
-    // Open mailto as backup action
-    const subject = encodeURIComponent(`Data Deletion Request [${generatedId}] - ${selectedApp}`);
-    const body = encodeURIComponent(
-      `Data Deletion Request Details:\n\nReference ID: ${generatedId}\nApp Name: ${selectedApp}\nUser Email: ${email}\nRequest Type: ${
-        deletionType === 'full' ? 'Full Account & Data Deletion' : 'Specific Data Removal'
-      }\nDate: ${new Date().toISOString()}\n\nPlease process this deletion request according to store compliance standards.`
-    );
-    window.location.href = `mailto:wiseappsdev@gmail.com?subject=${subject}&body=${body}`;
+    try {
+      const res = await fetch('/api/data-deletion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appName: selectedApp,
+          email: email,
+          deletionType: deletionType,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setReqId(data.referenceId);
+        setSubmitted(true);
+      } else {
+        setErrorMessage(data.error || 'Failed to submit deletion request. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('Network error occurred. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,8 +74,14 @@ export default function DataDeletionPage() {
 
                 <p className={styles.instructions}>
                   Please specify the app you are using and the email address associated with your account.
-                  Requests are typically processed within 14 to 30 days.
+                  Your request is processed automatically and queued for full deletion within 30 days.
                 </p>
+
+                {errorMessage && (
+                  <div style={{ padding: '12px 16px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-md)', color: '#FCA5A5', fontSize: '0.9rem' }}>
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
 
                 {/* Select App */}
                 <div className="form-group">
@@ -96,7 +120,7 @@ export default function DataDeletionPage() {
                     required
                   />
                   <span className={styles.fieldHint}>
-                    We will send confirmation of deletion to this email address.
+                    An automated record will be generated and dispatched to wiseappsdev@gmail.com.
                   </span>
                 </div>
 
@@ -139,35 +163,35 @@ export default function DataDeletionPage() {
                   type="submit"
                   className="btn btn-primary"
                   style={{ width: '100%', justifyContent: 'center', marginTop: '12px' }}
+                  disabled={loading}
                   id="submit-deletion-btn"
                 >
-                  Submit Deletion Request
+                  {loading ? 'Submitting Request...' : 'Submit Deletion Request'}
                 </button>
               </form>
             ) : (
               /* Success Confirmation */
               <div className={styles.successState}>
                 <div className={styles.successIcon}>✓</div>
-                <h2>Request Submitted</h2>
+                <h2>Data Deletion Request Recorded</h2>
                 <p className={styles.reqRef}>
-                  Reference Number: <code>{reqId}</code>
+                  Reference ID: <code>{reqId}</code>
                 </p>
                 <p className={styles.successText}>
-                  Your data deletion request for <strong>{selectedApp}</strong> ({email}) has been initiated.
-                  An automated email client trigger was opened to notify <code>wiseappsdev@gmail.com</code>.
+                  Your data deletion request for <strong>{selectedApp}</strong> ({email}) has been automatically logged and sent to <code>wiseappsdev@gmail.com</code>.
                 </p>
 
                 <div className={styles.infoBox}>
                   <h4>What happens next?</h4>
                   <ul>
-                    <li>Your request will be verified and queued for processing.</li>
-                    <li>Account access and associated data will be deleted within 30 days.</li>
-                    <li>You will receive a final email confirmation once deletion is complete.</li>
+                    <li>Your account data has been queued for permanent deletion.</li>
+                    <li>Account access and associated personal data will be wiped within 30 days.</li>
+                    <li>You will receive an email confirmation once deletion is complete.</li>
                   </ul>
                 </div>
 
                 <button
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => { setSubmitted(false); setEmail(''); setSelectedApp(''); }}
                   className="btn btn-secondary"
                   style={{ marginTop: '16px' }}
                 >
@@ -180,13 +204,13 @@ export default function DataDeletionPage() {
           {/* Policy & Guidance Sidebar */}
           <div className={styles.sidebar}>
             <div className={`card ${styles.policyCard}`}>
-              <h3>📋 Google Play &amp; Apple Store Policy Compliance</h3>
+              <h3>📋 Google Play &amp; Apple Store Compliance</h3>
               <p>
-                This deletion portal adheres to Google Play&apos;s <em>Data safety requirement</em> and Apple App Store&apos;s <em>Account Deletion requirement</em>.
+                This deletion portal satisfies Google Play&apos;s <em>Data safety requirement</em> and Apple App Store&apos;s <em>Account Deletion requirement</em>.
               </p>
               <ul className={styles.policyList}>
                 <li>
-                  <strong>Web Accessibility:</strong> Users can request deletion without re-installing the mobile app.
+                  <strong>Web Accessibility:</strong> Users can request deletion directly from the browser without reinstalling the mobile app.
                 </li>
                 <li>
                   <strong>Data Scope:</strong> Requests delete account credentials along with all personal data collected by the application.

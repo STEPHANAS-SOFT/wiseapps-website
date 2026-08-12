@@ -21,6 +21,7 @@ const footerLinks: Record<string, FooterLink[]> = {
   ],
   Connect: [
     { href: 'https://play.google.com/store/apps/developer?id=Wise+Apps+Dev', label: 'Google Play', external: true },
+    { href: 'https://apps.apple.com/developer/id1778404522', label: 'App Store', external: true },
     { href: 'mailto:wiseappsdev@gmail.com', label: 'Email Us', external: true },
   ],
 };
@@ -42,7 +43,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className={styles.tagline}>
-              Building mobile apps that people love — across Africa and beyond.
+              Building mobile &amp; desktop apps that people love — across Africa and beyond.
             </p>
             <div className={styles.location}>
               <span>🇳🇬</span>

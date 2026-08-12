@@ -85,7 +85,7 @@ export default function HomePage() {
             </a>
 
             <a
-              href="https://apps.apple.com/us/developer/wise-apps-dev/id1778404522"
+              href="https://apps.apple.com/developer/id1778404522"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.storePill}
