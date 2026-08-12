@@ -13,36 +13,33 @@ export async function POST(request: Request) {
     }
 
     const referenceId = 'WAD-DEL-' + Math.floor(100000 + Math.random() * 900000);
+    const scopeLabel = deletionType === 'full' ? 'Full Account & Data Deletion' : 'Partial Data Removal';
 
-    // Send payload to FormSubmit (dispatches directly to wiseappsdev@gmail.com)
+    // Send via FormSubmit using multipart/form-data (more reliable for server-to-server)
     let emailSent = false;
     try {
-      const fsRes = await fetch('https://formsubmit.co/ajax/wiseappsdev@gmail.com', {
+      const formData = new FormData();
+      formData.append('_subject', `[DATA DELETION REQUEST] ${referenceId} - ${appName}`);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('_replyto', email);
+      formData.append('Reference ID', referenceId);
+      formData.append('App Name', appName);
+      formData.append('User Email', email);
+      formData.append('Deletion Scope', scopeLabel);
+      formData.append('Submitted At', new Date().toUTCString());
+      formData.append('Action Required', 'Verify user identity and remove records within 30 days per Google Play & Apple App Store policies.');
+
+      const fsRes = await fetch('https://formsubmit.co/wiseappsdev@gmail.com', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Origin': 'https://wiseapps-website.vercel.app',
-          'Referer': 'https://wiseapps-website.vercel.app/data-deletion',
-        },
-        body: JSON.stringify({
-          _subject: `[DATA DELETION REQUEST] ${referenceId} - ${appName}`,
-          _template: 'table',
-          _captcha: 'false',
-          reference_id: referenceId,
-          app_name: appName,
-          user_email: email,
-          deletion_scope: deletionType === 'full' ? 'Full Account & Data Deletion' : 'Partial Data Removal',
-          timestamp: new Date().toISOString(),
-          message: `DATA DELETION REQUEST RECEIVED\n\nReference ID: ${referenceId}\nApp Name: ${appName}\nUser Email: ${email}\nScope: ${
-            deletionType === 'full' ? 'Full Account & Data Deletion' : 'Partial Data Removal'
-          }\nTimestamp: ${new Date().toISOString()}\n\nPlease verify user identity and remove user records within 30 days in compliance with Google Play & Apple App Store rules.`,
-        }),
+        body: formData,
       });
 
-      const fsData = await fsRes.json();
-      if (fsData.success === 'true' || fsData.success === true) {
+      if (fsRes.ok) {
         emailSent = true;
+      } else {
+        const text = await fsRes.text();
+        console.error('FormSubmit deletion error response:', fsRes.status, text);
       }
     } catch (err) {
       console.error('FormSubmit dispatch error:', err);

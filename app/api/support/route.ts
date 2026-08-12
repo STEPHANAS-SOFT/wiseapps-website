@@ -14,36 +14,34 @@ export async function POST(request: Request) {
 
     const ticketId = 'WAD-SUP-' + Math.floor(100000 + Math.random() * 900000);
 
-    // Send payload to FormSubmit (dispatches directly to wiseappsdev@gmail.com)
+    // Send via FormSubmit using multipart/form-data (more reliable for server-to-server)
     let emailSent = false;
     try {
-      const fsRes = await fetch('https://formsubmit.co/ajax/wiseappsdev@gmail.com', {
+      const formData = new FormData();
+      formData.append('_subject', `[SUPPORT TICKET ${ticketId}] ${appName ? appName + ' - ' : ''}From ${name}`);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('_replyto', email);
+      formData.append('Ticket ID', ticketId);
+      formData.append('Name', name);
+      formData.append('Email', email);
+      formData.append('App', appName || 'General Inquiry');
+      formData.append('Message', message);
+      formData.append('Submitted At', new Date().toUTCString());
+
+      const fsRes = await fetch('https://formsubmit.co/wiseappsdev@gmail.com', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Origin': 'https://wiseapps-website.vercel.app',
-          'Referer': 'https://wiseapps-website.vercel.app/support',
-        },
-        body: JSON.stringify({
-          _subject: `[SUPPORT TICKET ${ticketId}] ${appName ? appName + ' - ' : ''}From ${name}`,
-          _template: 'table',
-          _captcha: 'false',
-          ticket_id: ticketId,
-          user_name: name,
-          user_email: email,
-          app_selected: appName || 'General Inquiry',
-          message: message,
-          timestamp: new Date().toISOString(),
-        }),
+        body: formData,
       });
 
-      const fsData = await fsRes.json();
-      if (fsData.success === 'true' || fsData.success === true) {
+      if (fsRes.ok) {
         emailSent = true;
+      } else {
+        const text = await fsRes.text();
+        console.error('FormSubmit support error response:', fsRes.status, text);
       }
     } catch (err) {
-      console.error('Support FormSubmit error:', err);
+      console.error('Support FormSubmit fetch error:', err);
     }
 
     return NextResponse.json({
