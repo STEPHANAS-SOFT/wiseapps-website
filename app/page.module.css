@@ -109,6 +109,25 @@
   transform: translateY(-2px);
 }
 
+.storePillDesktop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  background: rgba(94, 234, 212, 0.1);
+  border: 1px solid rgba(94, 234, 212, 0.25);
+  font-size: 0.85rem;
+  color: #5EEAD4;
+  text-decoration: none;
+  transition: all var(--transition-normal);
+}
+
+.storePillDesktop:hover {
+  background: rgba(94, 234, 212, 0.2);
+  transform: translateY(-2px);
+}
+
 /* Floating cards */
 .floatingCards {
   position: absolute;
@@ -126,7 +145,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
@@ -138,8 +157,6 @@
   white-space: nowrap;
   box-shadow: var(--shadow-md);
 }
-
-.floatCard span:first-child { font-size: 1.4rem; }
 
 .floatCard1 { transform: translateX(40px); }
 .floatCard2 { transform: translateX(0); }

@@ -6,16 +6,43 @@ export interface App {
   description: string;
   category: string;
   categoryColor: string;
-  platforms: ('android' | 'ios')[];
+  platforms: ('android' | 'ios' | 'windows' | 'mac')[];
   playStoreUrl?: string;
   appStoreUrl?: string;
-  icon: string; // emoji fallback
+  websiteUrl?: string;
+  iconUrl: string;
   iconBg: string;
   features: string[];
-  hasAccount: boolean; // whether app has user accounts (for data deletion)
+  hasAccount: boolean;
+  downloads?: string;
+  rating?: string;
+  isDesktop?: boolean;
 }
 
 export const apps: App[] = [
+  {
+    id: 'verseflow',
+    slug: 'verseflow',
+    name: 'VerseFlow — Live Scripture & Lyrics',
+    tagline: 'Automatic Bible verse and worship song display for church media teams.',
+    description:
+      'VerseFlow is WiseApps Dev’s flagship desktop application for Windows and macOS. It listens to church services in real time — detecting Bible references and spoken quotes as the pastor preaches, and recognizing hymns and worship songs as the congregation sings — displaying words on screen automatically via display output or NDI to OBS, vMix, and ProPresenter.',
+    category: 'Desktop Software',
+    categoryColor: '#5EEAD4',
+    platforms: ['windows', 'mac'],
+    websiteUrl: 'https://verseflow.app',
+    iconUrl: '/icons/verseflow.png',
+    iconBg: 'linear-gradient(135deg, #0F766E, #14B8A6)',
+    features: [
+      'Real-time Bible reference & quote detection from speech',
+      'Automatic hymn & worship song recognition from singing',
+      'NDI & fullscreen display output for OBS, vMix & ProPresenter',
+      'Works 100% offline with bundled multi-language Bible library',
+      'Supports 6 languages (English, Spanish, French, German, Italian, Portuguese)',
+    ],
+    hasAccount: true,
+    isDesktop: true,
+  },
   {
     id: 'soundpad',
     slug: 'soundpad',
@@ -27,7 +54,8 @@ export const apps: App[] = [
     categoryColor: '#8B5CF6',
     platforms: ['android', 'ios'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseappsdev.soundpad',
-    icon: '🎹',
+    appStoreUrl: 'https://apps.apple.com/us/app/soundpad-sampler-daw/id6788076455',
+    iconUrl: '/icons/soundpad.png',
     iconBg: 'linear-gradient(135deg, #4C1D95, #7C3AED)',
     features: [
       'MIDI keyboard support',
@@ -37,6 +65,8 @@ export const apps: App[] = [
       'DAW-quality sound engine',
     ],
     hasAccount: false,
+    downloads: '50K+',
+    rating: '4.5★',
   },
   {
     id: 'bookora',
@@ -49,7 +79,7 @@ export const apps: App[] = [
     categoryColor: '#0EA5E9',
     platforms: ['android', 'ios'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseappsdev.bookora',
-    icon: '📅',
+    iconUrl: '/icons/bookora.png',
     iconBg: 'linear-gradient(135deg, #0C4A6E, #0369A1)',
     features: [
       'Online appointment booking',
@@ -59,28 +89,7 @@ export const apps: App[] = [
       'Business dashboard',
     ],
     hasAccount: true,
-  },
-  {
-    id: 'newsradar',
-    slug: 'newsradar',
-    name: 'NewsRadar: Nigeria News',
-    tagline: 'Fast, reliable Nigerian news — all in one place.',
-    description:
-      'NewsRadar aggregates top-rated news from trusted Nigerian sources, giving you the latest headlines, breaking news, and in-depth stories across politics, sports, entertainment, and business.',
-    category: 'News',
-    categoryColor: '#EF4444',
-    platforms: ['android'],
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseapp.news',
-    icon: '📰',
-    iconBg: 'linear-gradient(135deg, #7F1D1D, #DC2626)',
-    features: [
-      '4.7★ rated on Play Store',
-      'Multiple news sources',
-      'Category filtering',
-      'Offline reading',
-      'Breaking news alerts',
-    ],
-    hasAccount: false,
+    downloads: '10K+',
   },
   {
     id: 'all-nigeria-newspapers',
@@ -93,16 +102,43 @@ export const apps: App[] = [
     categoryColor: '#EF4444',
     platforms: ['android'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseappsdev.com',
-    icon: '🗞️',
+    iconUrl: '/icons/allnigerianewspapers.png',
     iconBg: 'linear-gradient(135deg, #78350F, #D97706)',
     features: [
-      '4.2★ rated on Play Store',
+      '500K+ downloads on Play Store',
+      '4.2★ rating from thousands of reviews',
       '20+ newspaper sources',
-      'Category browsing',
-      'Share articles',
-      'Lightweight & fast',
+      'Category browsing & instant share',
+      'Lightweight & fast loading',
     ],
     hasAccount: false,
+    downloads: '500K+',
+    rating: '4.2★',
+  },
+  {
+    id: 'newsradar',
+    slug: 'newsradar',
+    name: 'NewsRadar: Nigeria News',
+    tagline: 'Fast, reliable Nigerian news — all in one place.',
+    description:
+      'NewsRadar aggregates top-rated news from trusted Nigerian sources, giving you the latest headlines, breaking news, and in-depth stories across politics, sports, entertainment, and business.',
+    category: 'News',
+    categoryColor: '#EF4444',
+    platforms: ['android'],
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseapp.news',
+    appStoreUrl: 'https://apps.apple.com/us/app/news-update-nigeria/id6462785273',
+    iconUrl: '/icons/newsradar.png',
+    iconBg: 'linear-gradient(135deg, #7F1D1D, #DC2626)',
+    features: [
+      '4.7★ rated on Play Store',
+      'Multiple news sources',
+      'Category filtering',
+      'Offline reading mode',
+      'Breaking news alerts',
+    ],
+    hasAccount: false,
+    downloads: '10K+',
+    rating: '4.7★',
   },
   {
     id: 'invoice-manager',
@@ -113,9 +149,10 @@ export const apps: App[] = [
       'A lightweight, powerful invoice manager designed for freelancers and small businesses. Create professional invoices, track payments, manage clients, and export PDFs — no accounting degree needed.',
     category: 'Productivity',
     categoryColor: '#22C55E',
-    platforms: ['android'],
+    platforms: ['android', 'ios'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseapps.invoicemanager',
-    icon: '🧾',
+    appStoreUrl: 'https://apps.apple.com/us/app/invoice-manager-simple-easy/id6737921764',
+    iconUrl: '/icons/invoicemanager.png',
     iconBg: 'linear-gradient(135deg, #14532D, #16A34A)',
     features: [
       'Professional invoice templates',
@@ -125,6 +162,7 @@ export const apps: App[] = [
       'Tax calculations',
     ],
     hasAccount: false,
+    downloads: '10K+',
   },
   {
     id: 'prepforge',
@@ -137,7 +175,8 @@ export const apps: App[] = [
     categoryColor: '#F59E0B',
     platforms: ['android', 'ios'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseapps.prepforge',
-    icon: '🧠',
+    appStoreUrl: 'https://apps.apple.com/us/app/prepforge/id6746358907',
+    iconUrl: '/icons/prepforge.png',
     iconBg: 'linear-gradient(135deg, #78350F, #B45309)',
     features: [
       'AI quiz generation from PDFs',
@@ -147,6 +186,7 @@ export const apps: App[] = [
       'Offline quiz access',
     ],
     hasAccount: true,
+    downloads: '10K+',
   },
   {
     id: 'nigeria-comedy-sounds',
@@ -154,43 +194,47 @@ export const apps: App[] = [
     name: 'Nigeria Comedy Sounds & Effect',
     tagline: 'Your favourite Nigerian comedy clips & sound effects.',
     description:
-      'A collection of the most hilarious and popular Nigerian comedy sound clips and effects. Perfect for prank calls, WhatsApp chats, or just having a good laugh. Loved by over thousands of Nigerian users.',
+      'A collection of the most hilarious and popular Nigerian comedy sound clips and effects. Perfect for prank calls, WhatsApp chats, or just having a good laugh. Loved by over 100,000 users.',
     category: 'Entertainment',
     categoryColor: '#EC4899',
     platforms: ['android'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseapps.comedysound',
-    icon: '😂',
+    iconUrl: '/icons/comedysound.png',
     iconBg: 'linear-gradient(135deg, #831843, #DB2777)',
     features: [
-      '4.5★ rated on Play Store',
-      'Huge sound library',
-      'One-tap playback',
-      'Downloadable sounds',
-      'New sounds added regularly',
+      '100K+ downloads on Play Store',
+      '4.5★ rating',
+      'Huge comedy sound library',
+      'One-tap audio playback',
+      'Downloadable audio clips',
     ],
     hasAccount: false,
+    downloads: '100K+',
+    rating: '4.5★',
   },
   {
     id: 'adpulse',
     slug: 'adpulse',
-    name: 'AdPulse',
-    tagline: 'Your AdMob earnings, at a glance.',
+    name: 'AdPulse — AdMob Dashboard',
+    tagline: 'Your AdMob earnings & revenue analytics at a glance.',
     description:
       'AdPulse is a clean, fast AdMob dashboard that gives app developers instant visibility into their advertising revenue, impressions, eCPM, and trends — all from their mobile device.',
     category: 'Developer Tools',
     categoryColor: '#6366F1',
-    platforms: ['android'],
+    platforms: ['android', 'ios'],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.adpulse.ad_pulse',
-    icon: '📊',
+    appStoreUrl: 'https://apps.apple.com/us/app/adpulse-admob-dashboard/id6762448472',
+    iconUrl: '/icons/adpulse.png',
     iconBg: 'linear-gradient(135deg, #1E1B4B, #4338CA)',
     features: [
       'AdMob revenue dashboard',
       'Earnings trend charts',
       'eCPM & impression tracking',
-      'Per-app breakdown',
+      'Per-app revenue breakdown',
       'Fast & lightweight',
     ],
     hasAccount: true,
+    downloads: '10K+',
   },
   {
     id: 'subsify',
@@ -202,7 +246,9 @@ export const apps: App[] = [
     category: 'Finance',
     categoryColor: '#14B8A6',
     platforms: ['android', 'ios'],
-    icon: '💳',
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.wiseappsdev.subsify',
+    appStoreUrl: 'https://apps.apple.com/us/app/subsify-data-bills-payment/id6737881683',
+    iconUrl: '/icons/subsify.png',
     iconBg: 'linear-gradient(135deg, #134E4A, #0F766E)',
     features: [
       'Mobile data purchase',
@@ -210,6 +256,49 @@ export const apps: App[] = [
       'TV subscription payment',
       'Electricity bill payment',
       'Transaction history',
+    ],
+    hasAccount: true,
+    downloads: '10K+',
+  },
+  {
+    id: 'buga-ride',
+    slug: 'buga-ride',
+    name: 'Buga Ride',
+    tagline: 'Fast, reliable ride booking & urban transport.',
+    description:
+      'Buga Ride is a mobile ride hailing and transportation app designed for seamless urban movement. Book rides, track drivers in real time, and enjoy safe trips.',
+    category: 'Travel',
+    categoryColor: '#F59E0B',
+    platforms: ['ios'],
+    appStoreUrl: 'https://apps.apple.com/us/app/buga-ride/id6747893712',
+    iconUrl: '/icons/bugaride.png',
+    iconBg: 'linear-gradient(135deg, #B45309, #F59E0B)',
+    features: [
+      'Real-time ride booking',
+      'Driver tracking',
+      'Transparent pricing',
+      'Trip history & receipts',
+    ],
+    hasAccount: true,
+  },
+  {
+    id: 'fastrpay',
+    slug: 'fastrpay',
+    name: 'FastrPay',
+    tagline: 'Instant digital payments & wallet transfers.',
+    description:
+      'FastrPay provides ultra-fast digital payments, peer-to-peer transfers, and utility payments built for high reliability.',
+    category: 'Finance',
+    categoryColor: '#10B981',
+    platforms: ['ios'],
+    appStoreUrl: 'https://apps.apple.com/us/app/fastrpay/id6761764803',
+    iconUrl: '/icons/fastrpay.png',
+    iconBg: 'linear-gradient(135deg, #065F46, #10B981)',
+    features: [
+      'Instant digital wallet',
+      'Fast peer-to-peer transfers',
+      'Bill payments & airtime',
+      'Bank-grade security',
     ],
     hasAccount: true,
   },

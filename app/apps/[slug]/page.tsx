@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { apps } from '@/data/apps';
 import styles from './page.module.css';
 
@@ -39,13 +40,20 @@ export default async function AppDetailPage({ params }: Props) {
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          All Apps
+          All Apps &amp; Software
         </Link>
 
         {/* Header */}
         <div className={styles.header}>
-          <div className={styles.iconWrap} style={{ background: app.iconBg }}>
-            <span className={styles.icon}>{app.icon}</span>
+          <div className={styles.iconWrap}>
+            <Image
+              src={app.iconUrl}
+              alt={`${app.name} Icon`}
+              width={100}
+              height={100}
+              style={{ borderRadius: 'var(--radius-xl)', objectFit: 'cover' }}
+              unoptimized
+            />
           </div>
 
           <div className={styles.headerInfo}>
@@ -64,16 +72,26 @@ export default async function AppDetailPage({ params }: Props) {
 
             {/* Platform badges */}
             <div className={styles.platforms}>
-              {app.platforms.includes('android') && (
-                <span className={styles.platformBadge}>Android</span>
-              )}
-              {app.platforms.includes('ios') && (
-                <span className={styles.platformBadge}>iOS</span>
-              )}
+              {app.platforms.map((p) => (
+                <span key={p} className={styles.platformBadge}>
+                  {p === 'android' ? 'Android' : p === 'ios' ? 'iOS' : p === 'windows' ? 'Windows' : 'macOS'}
+                </span>
+              ))}
             </div>
 
-            {/* Store buttons */}
+            {/* Store / Download / Website buttons */}
             <div className={styles.storeButtons}>
+              {app.websiteUrl && (
+                <a
+                  href={app.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                  id={`website-${app.id}`}
+                >
+                  Visit Official Website →
+                </a>
+              )}
               {app.playStoreUrl && (
                 <a
                   href={app.playStoreUrl}
@@ -113,7 +131,7 @@ export default async function AppDetailPage({ params }: Props) {
           {/* Description */}
           <div>
             <div className={`card ${styles.descCard}`}>
-              <h2 className={styles.sectionTitle}>About This App</h2>
+              <h2 className={styles.sectionTitle}>About This Product</h2>
               <p className={styles.description}>{app.description}</p>
             </div>
 
@@ -134,7 +152,7 @@ export default async function AppDetailPage({ params }: Props) {
           {/* Sidebar */}
           <div className={styles.sidebar}>
             <div className={`card ${styles.infoCard}`}>
-              <h3 className={styles.infoTitle}>App Information</h3>
+              <h3 className={styles.infoTitle}>Product Information</h3>
               <div className={styles.infoList}>
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>Developer</span>
@@ -147,14 +165,26 @@ export default async function AppDetailPage({ params }: Props) {
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>Platforms</span>
                   <span className={styles.infoValue}>
-                    {app.platforms.map((p) => p === 'android' ? 'Android' : 'iOS').join(', ')}
+                    {app.platforms.map((p) => (p === 'android' ? 'Android' : p === 'ios' ? 'iOS' : p === 'windows' ? 'Windows' : 'macOS')).join(', ')}
                   </span>
                 </div>
+                {app.downloads && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Downloads</span>
+                    <span className={styles.infoValue}>{app.downloads}</span>
+                  </div>
+                )}
+                {app.rating && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Rating</span>
+                    <span className={styles.infoValue}>{app.rating}</span>
+                  </div>
+                )}
               </div>
             </div>
 
             <div className={`card ${styles.linksCard}`}>
-              <h3 className={styles.infoTitle}>Legal & Support</h3>
+              <h3 className={styles.infoTitle}>Legal &amp; Support</h3>
               <div className={styles.linksList}>
                 <Link href="/privacy" className={styles.legalLink}>
                   <span>🔒</span> Privacy Policy
