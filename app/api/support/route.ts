@@ -14,32 +14,46 @@ export async function POST(request: Request) {
 
     const ticketId = 'WAD-SUP-' + Math.floor(100000 + Math.random() * 900000);
 
-    // Send payload to Web3Forms free email dispatch handler
+    // Send payload to FormSubmit (dispatches directly to wiseappsdev@gmail.com)
+    let emailSent = false;
     try {
-      await fetch('https://api.web3forms.com/submit', {
+      const fsRes = await fetch('https://formsubmit.co/ajax/wiseappsdev@gmail.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': 'https://wiseapps-website.vercel.app',
+          'Referer': 'https://wiseapps-website.vercel.app/support',
+        },
         body: JSON.stringify({
-          access_key: '6ee1a6ec-2e90-4e55-83e9-6fbfeb1d8ecb',
-          subject: `[SUPPORT TICKET ${ticketId}] ${appName ? appName + ' - ' : ''}From ${name}`,
-          from_name: `${name} via WiseApps Dev Website`,
-          to_email: 'wiseappsdev@gmail.com',
+          _subject: `[SUPPORT TICKET ${ticketId}] ${appName ? appName + ' - ' : ''}From ${name}`,
+          _template: 'table',
+          _captcha: 'false',
           ticket_id: ticketId,
           user_name: name,
           user_email: email,
           app_selected: appName || 'General Inquiry',
           message: message,
-          submitted_at: new Date().toISOString(),
+          timestamp: new Date().toISOString(),
         }),
       });
+
+      const fsData = await fsRes.json();
+      if (fsData.success === 'true' || fsData.success === true) {
+        emailSent = true;
+      }
     } catch (err) {
-      console.error('Support email dispatch warning:', err);
+      console.error('Support FormSubmit error:', err);
     }
 
     return NextResponse.json({
       success: true,
       ticketId,
-      message: 'Support message received successfully.',
+      emailSent,
+      name,
+      email,
+      appName,
+      message,
     });
   } catch (error) {
     console.error('API Support Error:', error);

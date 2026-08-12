@@ -48,6 +48,12 @@ export default function SupportPage() {
     }
   };
 
+  const getMailtoLink = () => {
+    const subject = encodeURIComponent(`[Support Ticket ${ticketId}] ${appName ? appName + ' - ' : ''}From ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nApp: ${appName || 'General Inquiry'}\n\nMessage:\n${message}`);
+    return `mailto:wiseappsdev@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <section className={`section ${styles.page}`}>
       <div className="container">
@@ -224,20 +230,25 @@ export default function SupportPage() {
             ) : (
               <div className={styles.successState}>
                 <div className={styles.successIcon}>✓</div>
-                <h2>Message Sent Successfully</h2>
+                <h2>Message Received!</h2>
                 <p className={styles.ticketRef}>
-                  Ticket Number: <code>{ticketId}</code>
+                  Ticket Reference: <code>{ticketId}</code>
                 </p>
                 <p className={styles.successText}>
-                  Thank you, <strong>{name}</strong>! Your message has been sent to our support team (<code>wiseappsdev@gmail.com</code>). We will respond to <strong>{email}</strong> within 24 hours.
+                  Thank you, <strong>{name}</strong>! Your support request has been logged and sent to <code>wiseappsdev@gmail.com</code>. We will respond to <strong>{email}</strong> within 24 hours.
                 </p>
-                <button
-                  onClick={() => { setSubmitted(false); setName(''); setEmail(''); setAppName(''); setMessage(''); }}
-                  className="btn btn-secondary"
-                  style={{ marginTop: '16px' }}
-                >
-                  Send Another Message
-                </button>
+                <div style={{ marginTop: '16px', display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <a href={getMailtoLink()} className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
+                    ✉️ Open Email App Backup
+                  </a>
+                  <button
+                    onClick={() => { setSubmitted(false); setName(''); setEmail(''); setAppName(''); setMessage(''); }}
+                    className="btn btn-primary"
+                    style={{ fontSize: '0.85rem' }}
+                  >
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             )}
           </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { apps } from '@/data/apps';
 import styles from './page.module.css';
 
@@ -48,6 +47,16 @@ export default function DataDeletionPage() {
     }
   };
 
+  const getMailtoLink = () => {
+    const subject = encodeURIComponent(`Data Deletion Request [${reqId}] - ${selectedApp}`);
+    const body = encodeURIComponent(
+      `DATA DELETION REQUEST DETAILS:\n\nReference ID: ${reqId}\nApp Name: ${selectedApp}\nUser Email: ${email}\nScope: ${
+        deletionType === 'full' ? 'Full Account & Data Deletion' : 'Partial Data Removal'
+      }\nDate: ${new Date().toISOString()}\n\nPlease process this request within 30 days.`
+    );
+    return `mailto:wiseappsdev@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <section className={`section ${styles.page}`}>
       <div className="container">
@@ -74,7 +83,7 @@ export default function DataDeletionPage() {
 
                 <p className={styles.instructions}>
                   Please specify the app you are using and the email address associated with your account.
-                  Your request is processed automatically and queued for full deletion within 30 days.
+                  Your request is submitted automatically to wiseappsdev@gmail.com for processing within 30 days.
                 </p>
 
                 {errorMessage && (
@@ -120,7 +129,7 @@ export default function DataDeletionPage() {
                     required
                   />
                   <span className={styles.fieldHint}>
-                    An automated record will be generated and dispatched to wiseappsdev@gmail.com.
+                    Deletion details will be dispatched to wiseappsdev@gmail.com.
                   </span>
                 </div>
 
@@ -178,25 +187,29 @@ export default function DataDeletionPage() {
                   Reference ID: <code>{reqId}</code>
                 </p>
                 <p className={styles.successText}>
-                  Your data deletion request for <strong>{selectedApp}</strong> ({email}) has been automatically logged and sent to <code>wiseappsdev@gmail.com</code>.
+                  Your data deletion request for <strong>{selectedApp}</strong> ({email}) has been recorded.
                 </p>
 
                 <div className={styles.infoBox}>
                   <h4>What happens next?</h4>
                   <ul>
                     <li>Your account data has been queued for permanent deletion.</li>
-                    <li>Account access and associated personal data will be wiped within 30 days.</li>
-                    <li>You will receive an email confirmation once deletion is complete.</li>
+                    <li>Account access and personal data will be wiped within 30 days.</li>
                   </ul>
                 </div>
 
-                <button
-                  onClick={() => { setSubmitted(false); setEmail(''); setSelectedApp(''); }}
-                  className="btn btn-secondary"
-                  style={{ marginTop: '16px' }}
-                >
-                  Submit Another Request
-                </button>
+                <div style={{ marginTop: '20px', display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <a href={getMailtoLink()} className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
+                    ✉️ Open Email App Backup
+                  </a>
+                  <button
+                    onClick={() => { setSubmitted(false); setEmail(''); setSelectedApp(''); }}
+                    className="btn btn-primary"
+                    style={{ fontSize: '0.85rem' }}
+                  >
+                    Submit Another Request
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -222,7 +235,7 @@ export default function DataDeletionPage() {
             </div>
 
             <div className={`card ${styles.policyCard}`}>
-              <h3>✉️ Need Direct Assistance?</h3>
+              <h3>✉️ Direct Email Support</h3>
               <p>
                 You can also email your deletion request directly to our privacy officer at:
               </p>
